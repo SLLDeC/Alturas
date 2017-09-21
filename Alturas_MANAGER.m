@@ -36,8 +36,11 @@ if  isempty(bad) == 0
 else
 end
 
-disp(['Fin del entrenamiento' ]);
+disp('Fin del entrenamiento');
 disp(' ');
+
+%% Guarda todos los datos
+save('sujetos_alturas.mat','sujeto')
 
 %% Experimento
 step=2;
@@ -53,8 +56,8 @@ if  isempty(bad) == 0
 else
 end
 
-disp(['Fin del experimento. Muchas gracias por participar!' ]);
+disp('Fin del experimento. Muchas gracias por participar!');
 disp(' ');
 
 %% Guarda todos los datos
-save('sujetos.mat','sujeto')
+save('sujetos_alturas.mat','sujeto')
