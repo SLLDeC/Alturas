@@ -1,9 +1,8 @@
 clear all
 close all
-load('sujetos_alturasPOSTA.mat')
+load('sujetos_alturas.mat')
 
 %% Parï¿½metros----------------------------------------------
-% s=2;
 pre_baseline_bips = 5;        % NÂ° de bips usados para calcular el prebaseline
 pos_baseline_bips = 5;        % NÂ° de bips usados para calcular el posbaseline
 out_limit = 150;              % Asincronia maxima permitida
@@ -23,7 +22,7 @@ for s=1:length(sujeto)
         pert_indx(m)=find(sujeto(s).exp(m).asyn(2,:)==pert_bip(m));
         min_bip(m,sujeto(s).exp(m).mech_size)=min(sujeto(s).exp(m).asyn(2,:)-pert_bip(m));
         max_bip(m,mech_sizes(m))=max(sujeto(s).exp(m).asyn(2,:)-pert_bip(m));
-        pre_baseline(m)=mean(sujeto(s).exp(m).asyn(1,pert_indx(m)-pre_baseline_bips-1:pert_indx(m)-1));
+        pre_baseline(m)=mean(sujeto(s).exp(m).asyn(1,pert_indx(m)-pre_baseline_bips:pert_indx(m)));
         pos_baseline(m)=mean(sujeto(s).exp(m).asyn(1,end-pos_baseline_bips:end));
         
         if isempty(find(abs(sujeto(s).exp(m).asyn(1,:)-pre_baseline(m))>=out_limit))==1
@@ -285,7 +284,7 @@ for s=1:length(sujeto)
     end
     % legend('-1.5','-1.0','-0.5','0','+0.5','+1.0','+1.5')
     
-    save('sujetos.mat','sujeto')
+    save('sujetos_alturas.mat','sujeto')
     
 end
 
@@ -293,11 +292,13 @@ end
 figure()
 x_mech=[-1.5 -1.0 -0.5 0 0.5 1.0 1.5];
 
-for s=1:2
+for s=1:length(sujeto)
     color=colores(s);
     Legend{s}=strcat('sujeto', num2str(s));
     for p=1:7
         title('pert. espacial')
+        ylabel('asincronía [ms]')
+        xlabel('altura escalón [cm]')
         data(p)=sujeto(s).condicion(p).serie_prom_bs(1,(sujeto(s).condicion(p).serie_prom(2,:)==1));
     end
     
@@ -311,11 +312,13 @@ legend(Legend)
 
 %% Efecto de la perturbacion espacial en deltaNMA
 figure()
-for s=1:2
+for s=1:length(sujeto)
     color=colores(s);
     Legend{s}=strcat('sujeto', num2str(s));
     for p=1:7
         title('deltaNMA')
+        ylabel('posNMA-preNMA [ms]')
+        xlabel('altura escalón [cm]')
         data(p)=sujeto(s).condicion(p).mean_prebaseline-sujeto(s).condicion(p).mean_posbaseline;
     end
     
@@ -329,11 +332,13 @@ legend(Legend)
 
 %% Efecto de la perturbacion espacial en deltaITI
 figure()
-for s=1:2
+for s=1:length(sujeto)
     color=colores(s);
     Legend{s}=strcat('sujeto', num2str(s));
     for p=1:7
         title('deltaITI')
+        ylabel('posITI-preITI [ms]')
+        xlabel('altura escalón [cm]')
         data(p)=sujeto(s).condicion(p).mean_preITI-sujeto(s).condicion(p).mean_posITI;
     end
     
