@@ -1,6 +1,7 @@
 clear all
 close all
-load('sujetos.mat')
+% load('sujetos_alturas.mat')
+load('sujetos_alturas.mat')
 
 %% Par�metros----------------------------------------------
 pre_baseline_bips = 5;        % N° de bips usados para calcular el prebaseline
@@ -49,6 +50,8 @@ ASYN_BS=nan(n_rep,length(max_trial),c);
     
     for t=1:N
         
+        sujeto(s).exp(t).out=out(t);
+        
         if out(t)==0 % Si el trial no tiene outlier se calcula el pre y posITI
             for i=1:length(sujeto(s).exp(t).resp)-1
                 resp_n=sujeto(s).exp(t).resp(1,i);
@@ -56,7 +59,7 @@ ASYN_BS=nan(n_rep,length(max_trial),c);
                 if i<pert_bip(t)
                     preITI(cpreITI)=resp_n1-resp_n;
                     cpreITI=cpreITI+1;
-                elseif i>=pert_bip(t)
+                elseif i>=pert_bip(t)+5 %el posITI se calcula luego del "overshoot"
                     posITI(cposITI)=resp_n1-resp_n;
                     cposITI=cposITI+1;
                 end
@@ -67,8 +70,7 @@ ASYN_BS=nan(n_rep,length(max_trial),c);
             meanpreITI(t)=nan;
             meanposITI(t)=nan;
         end
-   
-        
+  
         if sujeto(s).exp(t).mech_size==steps(1)
             c=1;
             c1=c1+1;
@@ -118,17 +120,18 @@ ASYN_BS=nan(n_rep,length(max_trial),c);
             end        
         
         end
-        sujeto(s).exp(t).out=out(t);
+        
     
     for c=1:length(sujeto(s).condicion)
         
         sujeto(s).condicion(c).serie_prom(1,:)=nanmean(ASYN(:,:,c));
-        sujeto(s).condicion(c).serie_prom_std(1,:)=nanstd(ASYN(:,:,c));
         sujeto(s).condicion(c).serie_prom(2,:)=max_trial;
+        sujeto(s).condicion(c).serie_prom_std(1,:)=nanstd(ASYN(:,:,c));
+        sujeto(s).condicion(c).serie_prom_std(2,:)=max_trial;
         sujeto(s).condicion(c).serie_prom_bs(1,:)=nanmean(ASYN_BS(:,:,c));
-        sujeto(s).condicion(c).serie_prom_bs_std(1,:)=nanstd(ASYN_BS(:,:,c));
         sujeto(s).condicion(c).serie_prom_bs(2,:)=max_trial;
-        sujeto(s).condicion(c).serie_prom_bs(2,:)=nanmean(POS_BS(:,c));
+        sujeto(s).condicion(c).serie_prom_bs_std(1,:)=nanstd(ASYN_BS(:,:,c));
+        sujeto(s).condicion(c).serie_prom_bs_std(2,:)=max_trial;
         sujeto(s).condicion(c).mean_prebaseline=nanmean(PRE_BS(:,c));
         sujeto(s).condicion(c).std_prebaseline=nanstd(PRE_BS(:,c));
         sujeto(s).condicion(c).mean_posbaseline=nanmean(POS_BS(:,c));
@@ -147,7 +150,7 @@ ASYN_BS=nan(n_rep,length(max_trial),c);
     end
     
 
-save('sujetos_alturasPRUEBAS.mat','sujeto')
+save('sujetos_alturas.mat','sujeto')
         
     %% Series temporales de cada sujeto
     colores=['g' 'r' 'k' 'm' 'c' 'b' 'y'];
@@ -226,4 +229,4 @@ for s=1:length(sujeto)
 end
 legend(Legend)
 
-save('sujetos.mat','sujeto')
+save('sujetos_alturas.mat','sujeto')
