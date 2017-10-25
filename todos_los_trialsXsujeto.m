@@ -2,7 +2,7 @@
 clear all
 close all
 
-load('sujetos_ALTURAS.mat')
+load('sujetos_alturas.mat')
 s = input('Numero de sujeto a graficar ');
 
 perts = unique(horzcat( sujeto(s).exp.mech_size ));
