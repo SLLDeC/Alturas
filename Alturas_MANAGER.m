@@ -9,8 +9,8 @@ delete(instrfind);
 % Numero de bips por trial.
 N_stim = 20;
 % Repeticiones por condicion.
-n=1;
-n_entrenamiento=10;
+n=10;
+n_entrenamiento=1;
 % Perturbaciones mecanicas
 mech_sizes = [33 40 48 57 65 75 100]; % tamaï¿½o de la perturbaciï¿½n
 % mech_sizes = [103]; % tamaï¿½o de la perturbaciï¿½n
@@ -20,7 +20,8 @@ cond_mech = max(size(mech_sizes));
 
 %% 1. Registra datos del sujeto
 dir=pwd;
-[ sujeto,sujeto_number ] = f_DatosSujeto(dir);
+exp='alturas';
+[ sujeto,sujeto_number ] = f_DatosSujeto(dir, exp);
 
 %% Abre archivos temporales
 tent = fopen('temporal_ent','w');
@@ -40,8 +41,9 @@ if  isempty(bad) == 0
 else
 end
 
-disp('Fin del entrenamiento');
+disp('Fin del entrenamiento. Presione una tecla para comenzar con el experimento');
 disp(' ');
+pause()
 
 %% Guarda todos los datos
 save('sujetos_alturas.mat','sujeto')
@@ -64,5 +66,6 @@ disp('Fin del experimento. Muchas gracias por participar!');
 disp(' ');
 
 %% Guarda todos los datos
-save('sujetos_alturas.mat','sujeto')
+save('sujetos_alturas.mat','sujeto') % Matriz común
+save([num2str(sujeto_number) '_alturapps.mat'],'sujeto') % Matriz del sujeto
 
